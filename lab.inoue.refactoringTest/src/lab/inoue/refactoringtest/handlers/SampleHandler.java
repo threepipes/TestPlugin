@@ -9,6 +9,7 @@ import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.internal.corext.refactoring.code.ExtractMethodRefactoring;
 import org.eclipse.jdt.ui.JavaUI;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.viewers.ISelection;
@@ -49,6 +50,10 @@ public class SampleHandler extends AbstractHandler {
 		IWorkbench workbench = PlatformUI.getWorkbench();
 		// アクティブになっているウィンドウ(フォーカスがあっているウィンドウ)を取得
 		IWorkbenchWindow workbenchWindow = workbench.getActiveWorkbenchWindow();
+		MessageDialog.openInformation(
+				workbenchWindow.getShell(),
+				"TestPlugin",
+				"Refactoring");
 		// アクティブになっているパースペクティブを取得
 		IWorkbenchPage workbenchPage = workbenchWindow.getActivePage();
 		// アクティブになっているビューを取得
