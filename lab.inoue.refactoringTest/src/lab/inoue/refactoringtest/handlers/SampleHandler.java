@@ -4,10 +4,11 @@ import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.OperationCanceledException;
-import org.eclipse.jdt.internal.corext.refactoring.scripting.MoveMethodRefactoringContribution;
+import org.eclipse.jdt.core.ICompilationUnit;
+import org.eclipse.jdt.core.IJavaElement;
+import org.eclipse.jdt.internal.corext.refactoring.code.ExtractMethodRefactoring;
+import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.viewers.ISelection;
@@ -17,7 +18,6 @@ import org.eclipse.ltk.core.refactoring.CheckConditionsOperation;
 import org.eclipse.ltk.core.refactoring.CreateChangeOperation;
 import org.eclipse.ltk.core.refactoring.PerformChangeOperation;
 import org.eclipse.ltk.core.refactoring.Refactoring;
-import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbench;
@@ -75,9 +75,18 @@ public class SampleHandler extends AbstractHandler {
 		int offset = textSelection.getOffset();
 
 
-		
+		// IComplicationUnitの取得
+		IEditorPart editor = workbenchWindow.getActivePage().getActiveEditor();
+		IJavaElement javaElement = JavaUI.getEditorInputJavaElement(editor.getEditorInput());
+		if (javaElement.getElementType() != IJavaElement.COMPILATION_UNIT){
+			// should throw exception
+			return null;
+		}
+		ICompilationUnit cunit = (ICompilationUnit)javaElement;
+//			IType type = cunit.findPrimaryType();
+
 		/* Refactoringインスタンスの生成 */
-		Refactoring refactoring = createRefactoring();
+		Refactoring refactoring = createRefactoring(cunit, offset, textSelection.getLength());
 
 		/* Refactoringインスタンスを用いてCheckConditionsOparationインスタンスを生成 */
 		CheckConditionsOperation checkOP
@@ -110,34 +119,9 @@ public class SampleHandler extends AbstractHandler {
 		return null;
 	}
 
-	public Refactoring createRefactoring(){
-		return new Refactoring() {
-			
-			@Override
-			public String getName() {
-				// TODO 自動生成されたメソッド・スタブ
-				return "Test refactoring";
-			}
-			
-			@Override
-			public Change createChange(IProgressMonitor pm) throws CoreException, OperationCanceledException {
-				// TODO 自動生成されたメソッド・スタブ
-				return null;
-			}
-			
-			@Override
-			public RefactoringStatus checkInitialConditions(IProgressMonitor pm)
-					throws CoreException, OperationCanceledException {
-				// TODO 自動生成されたメソッド・スタブ
-				return null;
-			}
-			
-			@Override
-			public RefactoringStatus checkFinalConditions(IProgressMonitor pm)
-					throws CoreException, OperationCanceledException {
-				// TODO 自動生成されたメソッド・スタブ
-				return null;
-			}
-		};
+	public Refactoring createRefactoring(ICompilationUnit cu, int s, int t){
+		ExtractMethodRefactoring ref = new ExtractMethodRefactoring(cu, s, t);
+		ref.setMethodName("newMethod");
+		return ref;
 	}
 }
