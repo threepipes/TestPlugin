@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.commands">
+      <category
+            id="lab.inoue.refactoringTest.commands.category"
+            name="サンプル・カテゴリー">
+      </category>
+      <command
+            categoryId="lab.inoue.refactoringTest.commands.category"
+            id="lab.inoue.refactoringTest.commands.sampleCommand"
+            name="サンプル・コマンド">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            class="lab.inoue.refactoringtest.handlers.SampleHandler"
+            commandId="lab.inoue.refactoringTest.commands.sampleCommand">
+      </handler>
+   </extension>
+   <extension
+         point="org.eclipse.ui.bindings">
+      <key
+            commandId="lab.inoue.refactoringTest.commands.sampleCommand"
+            contextId="org.eclipse.ui.contexts.window"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="M1+6">
+      </key>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            locationURI="menu:org.eclipse.ui.main.menu?after=additions">
+         <menu
+               id="lab.inoue.refactoringTest.menus.sampleMenu"
+               label="サンプル・メニュー"
+               mnemonic="M">
+            <command
+                  commandId="lab.inoue.refactoringTest.commands.sampleCommand"
+                  id="lab.inoue.refactoringTest.menus.sampleCommand"
+                  mnemonic="S">
+            </command>
+         </menu>
+      </menuContribution>
+      <menuContribution
+            locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
+         <toolbar
+               id="lab.inoue.refactoringTest.toolbars.sampleToolbar">
+            <command
+                  commandId="lab.inoue.refactoringTest.commands.sampleCommand"
+                  icon="icons/sample.gif"
+                  id="lab.inoue.refactoringTest.toolbars.sampleCommand"
+                  tooltip="Say hello world">
+            </command>
+         </toolbar>
+      </menuContribution>
+   </extension>
+
+</plugin>
